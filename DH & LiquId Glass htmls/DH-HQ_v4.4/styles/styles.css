@@ -197,16 +197,27 @@
 
         /* --- UTILITY CLASSES --- */
         .glass-panel {
-       background-color: rgba(13, 14, 35, 0.21);
-       background-image: linear-gradient(rgba(255,255,255, 0.03), rgba(255,255,255, 0.03));
-        -webkit-backdrop-filter: blur(6px) saturate(120%) brightness(120%);
-        backdrop-filter: blur(6px) saturate(120%) brightness(120%);
-        box-shadow: inset 0 0 0 0px rgba(255,255,255, 0.05), inset 0 0 0 3px rgba(200,200,200, 0.025), 0 10px 26px rgba(0,0,0, var(--outerA, .22));
-        
-        /* Frame */
-        border: 1px solid rgba(128, 138, 189, 0.2);
-        border-radius: 10px;
-        box-shadow: rgba(255, 255, 255, 0.05) 0px 0px 0px 0px inset, rgba(200, 200, 200, 0.025) 0px 0px 0px 3px inset, rgba(0, 0, 0, 0.22) 0px 10px 26px 0px;
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(13, 14, 35, 0.25);
+            background-image: linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            -webkit-backdrop-filter: blur(8px) saturate(120%) brightness(120%);
+            backdrop-filter: blur(8px) saturate(120%) brightness(120%);
+            border: 1px solid rgba(128, 138, 189, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.22), inset 0 1px 1px rgba(255,255,255,0.05);
+        }
+
+        .glass-panel::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(1px);
+            box-shadow: inset -10px -8px 0px -11px rgba(255,255,255,0.1),
+                        inset 0 -9px 0px -8px rgba(255,255,255,0.05);
+            pointer-events: none;
         }
         /* --- HEADER & CONTROLS (3-Row Redesign) --- */
         .app-header {
@@ -534,9 +545,10 @@
   }
 }
         /* --- ROSTER VIEW --- */
-        #rosterContainer { 
-            width: 100%; 
-            overflow-x: auto; 
+        #rosterContainer {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: visible;
             padding: 1px;
         }
         #rosterGrid { 
@@ -665,6 +677,8 @@
 
     /* --- Player & Pick Card Styles --- */
         .player-row, .pick-row {
+            position: relative;
+            overflow: hidden;
             background: var(--color-panel-bg);
             border: 1px solid var(--color-panel-border);
             border-radius: var(--card-border-radius);
@@ -674,9 +688,18 @@
             flex-direction: column;
             gap: 0.1rem;
             transition: all 0.2s ease;
-            backdrop-filter: blur(1px);
-            -webkit-backdrop-filter: blur(1px);
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            -webkit-backdrop-filter: blur(6px) saturate(110%);
+            backdrop-filter: blur(6px) saturate(110%);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.05);
+        }
+
+        .player-row::after, .pick-row::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: rgba(255,255,255,0.02);
+            pointer-events: none;
         }
         .is-trade-mode .player-row, .is-trade-mode .pick-row { 
             cursor: pointer; 
@@ -1746,6 +1769,10 @@ main#content { align-items: stretch !important; }
   }
 }
 
+.install-card {
+  padding: 0.75rem;
+}
+
 .install-card h4 {
   margin: 0 0 0.25rem 0;
   font-size: 0.9rem;
@@ -2022,6 +2049,10 @@ font-weight: 500 !important;
     min-width: 150px;
 }
 
+.dropdown-menu.glass-panel {
+    background-color: transparent;
+}
+
 .dropdown-menu a {
     color: var(--color-text-secondary);
     text-decoration: none;
@@ -2128,12 +2159,7 @@ font-weight: 500 !important;
 
 
 #legend-section {
-            background: var(--color-panel-bg);
-            border: 1px solid var(--color-panel-border);
             border-radius: var(--panel-border-radius);
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
 /* Inline SVG for Trade Preview swap icon */
