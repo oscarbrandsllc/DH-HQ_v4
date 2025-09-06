@@ -633,9 +633,8 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
             if (!player) return { id: playerId, name: 'Unknown Player', pos: '?', age: '?', team: '?', adp: null, ktc: null, slot, posRank: null };
             const valueData = state.isSuperflex ? state.sflxData[playerId] : state.oneQbData[playerId];
             let lastName = player.last_name || '';
-            if (lastName.includes('-')) lastName = lastName.split('-')[0];
+            if (lastName.length > 9) lastName = lastName.slice(0, 9); // limit last name to 9 chars
             let displayName = `${player.first_name.charAt(0)}. ${lastName}`;
-            if (displayName.length > 15) displayName = displayName.substring(0, 14) + '…';
 
             // Prioritize age from the sheet and format it to one decimal place
             const ageFromSheet = valueData?.age;
