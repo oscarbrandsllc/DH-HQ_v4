@@ -531,6 +531,7 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
                 const columns = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
                 if (columns.length < 13) return;
                 const clean = (str) => str ? str.replace(/"/g, '').trim() : '';
+                const rank = clean(columns[0]);
                 const pos = clean(columns[2]);
                 const sleeperId = clean(columns[12]);
                 const adp = parseFloat(clean(columns[11]));
@@ -540,10 +541,11 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
 
                 if (pos === 'RDP') {
                     const pickName = clean(columns[1]);
-                    if (pickName) dataMap[pickName] = { adp: null, ktc: ktcValue, posRank: null };
+                    if (pickName) dataMap[pickName] = { adp: null, ktc: ktcValue, posRank: null, rank: null };
                 } else if (sleeperId && sleeperId !== 'NA') {
                     // Add the parsed age to the player's data object
                     dataMap[sleeperId] = { 
+                        rank: rank,
                         age: isNaN(age) ? null : age, 
                         adp: isNaN(adp) ? null : adp, 
                         ktc: isNaN(ktcValue) ? null : ktcValue, 
@@ -630,7 +632,7 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
 
         function getPlayerData(playerId, slot) {
             const player = state.players[playerId];
-            if (!player) return { id: playerId, name: 'Unknown Player', pos: '?', age: '?', team: '?', adp: null, ktc: null, slot, posRank: null };
+            if (!player) return { id: playerId, name: 'Unknown Player', pos: '?', age: '?', team: '?', adp: null, ktc: null, slot, posRank: null, rank: null };
             const valueData = state.isSuperflex ? state.sflxData[playerId] : state.oneQbData[playerId];
             let lastName = player.last_name || '';
             if (lastName.includes('-')) lastName = lastName.split('-')[0];
@@ -650,7 +652,8 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
                 adp: valueData?.adp || null, 
                 ktc: valueData?.ktc || null, 
                 slot, 
-                posRank: valueData?.posRank || null 
+                posRank: valueData?.posRank || null,
+                rank: valueData?.rank || null
             };
         }
 
@@ -846,6 +849,7 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
 
             const adp = player.adp ? player.adp.toFixed(1) : '—';
             const ktc = player.ktc || '—';
+            const rankSuperscript = player.rank ? `⁽${toSuperscript(player.rank)}⁾` : '';
             const slotAbbr = { 'SUPER_FLEX': 'SFLX', 'FLEX': 'FLX' };
             const displaySlot = state.currentRosterView === 'depth' ? (slotAbbr[player.slot] || player.slot) : player.pos;
             const teamTagHTML = player.team && player.team !== 'FA' 
@@ -867,7 +871,7 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
                     ${teamTagHTML}
                 </div>
                 <div class="player-value-line">
-                    <span>KTC: <span class="value player-ktc">${ktc}</span></span>
+                    <span>KTC: <span class="value player-ktc">${ktc}</span>${rankSuperscript}</span>
                     <span>ADP: <span class="value player-adp">${adp}</span></span>
                 </div>
             `;
@@ -1155,6 +1159,14 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
         }
 
         // --- Formatting Helpers ---
+        function toSuperscript(str) {
+            if (!str) return '';
+            const superscriptDigits = {
+                '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+                '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'
+            };
+            return String(str).split('').map(char => superscriptDigits[char] || '').join('');
+        }
         function deriveRookieYear(player) {
             if (!player) return null;
             let ry = player.metadata?.rookie_year ? Number(player.metadata.rookie_year) : 0;
