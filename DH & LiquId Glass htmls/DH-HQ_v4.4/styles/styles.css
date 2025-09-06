@@ -197,16 +197,27 @@
 
         /* --- UTILITY CLASSES --- */
         .glass-panel {
-       background-color: rgba(13, 14, 35, 0.21);
-       background-image: linear-gradient(rgba(255,255,255, 0.03), rgba(255,255,255, 0.03));
-        -webkit-backdrop-filter: blur(6px) saturate(120%) brightness(120%);
-        backdrop-filter: blur(6px) saturate(120%) brightness(120%);
-        box-shadow: inset 0 0 0 0px rgba(255,255,255, 0.05), inset 0 0 0 3px rgba(200,200,200, 0.025), 0 10px 26px rgba(0,0,0, var(--outerA, .22));
-        
-        /* Frame */
-        border: 1px solid rgba(128, 138, 189, 0.2);
-        border-radius: 10px;
-        box-shadow: rgba(255, 255, 255, 0.05) 0px 0px 0px 0px inset, rgba(200, 200, 200, 0.025) 0px 0px 0px 3px inset, rgba(0, 0, 0, 0.22) 0px 10px 26px 0px;
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(13, 14, 35, 0.25);
+            background-image: linear-gradient(rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            -webkit-backdrop-filter: blur(8px) saturate(120%) brightness(120%);
+            backdrop-filter: blur(8px) saturate(120%) brightness(120%);
+            border: 1px solid rgba(128, 138, 189, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 10px 26px rgba(0,0,0,0.22), inset 0 1px 1px rgba(255,255,255,0.05);
+        }
+
+        .glass-panel::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(1px);
+            box-shadow: inset -10px -8px 0px -11px rgba(255,255,255,0.1),
+                        inset 0 -9px 0px -8px rgba(255,255,255,0.05);
+            pointer-events: none;
         }
         /* --- HEADER & CONTROLS (3-Row Redesign) --- */
         .app-header {
@@ -534,9 +545,10 @@
   }
 }
         /* --- ROSTER VIEW --- */
-        #rosterContainer { 
-            width: 100%; 
-            overflow-x: auto; 
+        #rosterContainer {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: visible;
             padding: 1px;
         }
         #rosterGrid { 
@@ -552,14 +564,19 @@
             justify-content: center;
         }
         .roster-column {
-    width: 127px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    border: 1px solid transparent;       /* new base border */
-    border-radius: 8px;                   /* match header */
-}
+            width: 127px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            padding: 0.25rem;
+            background: var(--color-panel-bg);
+            border: 1px solid var(--color-panel-border);
+            border-radius: 8px;
+            -webkit-backdrop-filter: blur(6px) saturate(110%);
+            backdrop-filter: blur(6px) saturate(110%);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.05);
+        }
 
         /* ⬇︎ ENTIRE COLUMN GLOW ⬇︎ */
 .roster-column:has(.team-compare-checkbox.selected) {
@@ -665,6 +682,8 @@
 
     /* --- Player & Pick Card Styles --- */
         .player-row, .pick-row {
+            position: relative;
+            overflow: hidden;
             background: var(--color-panel-bg);
             border: 1px solid var(--color-panel-border);
             border-radius: var(--card-border-radius);
@@ -674,9 +693,18 @@
             flex-direction: column;
             gap: 0.1rem;
             transition: all 0.2s ease;
-            backdrop-filter: blur(1px);
-            -webkit-backdrop-filter: blur(1px);
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            -webkit-backdrop-filter: blur(6px) saturate(110%);
+            backdrop-filter: blur(6px) saturate(110%);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.05);
+        }
+
+        .player-row::after, .pick-row::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: rgba(255,255,255,0.02);
+            pointer-events: none;
         }
         .is-trade-mode .player-row, .is-trade-mode .pick-row { 
             cursor: pointer; 
@@ -1374,94 +1402,117 @@
 
 
 
-/* 𒎓 --- Roster Player Card Key 1 (ready) --- 𒎓 */
+
+
+/* 𒎓 --- Roster Player Card Key (Glass Legend) --- 𒎓 */
+#legend-section .panel-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+}
+
 #rosterPlayerCardKey.legend-card {
   width: min(340px, 92%);
   max-width: 340px;
-  margin: 0.9rem auto 0.4rem auto;  /* small gap above footnote */
-  padding: 0.8rem 0.85rem;
+  margin: 0.9rem auto 0.4rem auto;
+  padding: 1.25rem 0.95rem;
   border-radius: var(--card-border-radius, 12px);
+  background: var(--color-panel-bg);
+  border: 1px solid var(--color-panel-border);
+  -webkit-backdrop-filter: blur(6px) saturate(110%);
+  backdrop-filter: blur(6px) saturate(110%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.05);
   box-sizing: border-box;
-  flex: 0 0 auto;    /* prevent flex parents from stretching */
+  flex: 0 0 auto;
   align-self: center;
 }
 @media (min-width: 1440px) {
+  #rosterPlayerCardKey.legend-card,
+  #rosterCardFootnote.legend-footnote {
+    max-width: 320px;
+  }
   #rosterPlayerCardKey.legend-card {
     width: 320px;
-    max-width: 320px;
   }
 }
 
-/* Top row alignment */
 #rosterPlayerCardKey .legend-main {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
 }
-#rosterPlayerCardKey .legend-name { font-weight: 700; color: var(--color-text-primary); }
-
-/* Position tag pill */
-#rosterPlayerCardKey .player-tag.legend-pos {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.14rem 0.55rem;
-    background: linear-gradient(to bottom, rgba(13,14,35,0.15), rgba(8,8,25,0.32));
-  border-radius: 8px;
-  -webkit-backdrop-filter: blur(4px) saturate(110%) brightness(120%);
-  backdrop-filter: blur(4px) saturate(110%) brightness(120%);
-  box-shadow: inset 0 0 3px rgba(255,255,255,0.13), rgba(0, 0, 0, 0.26) 0px 7px 26px 1px;
-  font-weight: 800;
+#rosterPlayerCardKey .legend-name {
+  font-weight: 700;
   color: var(--color-text-primary);
-  letter-spacing: .25px;
-  line-height: 1.05;
 }
 
-/* Meta row: keep things aligned; push the last separator so team sits right */
-#rosterPlayerCardKey .legend-meta {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  color: var(--color-text-secondary);
-}
-#rosterPlayerCardKey .legend-pos-rank { color: var(--pos-qb, #FF3A75cc); } /* typical pos-rank tint */
-#rosterPlayerCardKey .legend-age { color: var(--color-accent-primary, #58E6D9); }
-#rosterPlayerCardKey .legend-meta .separator:last-of-type {
-  margin-left: auto;
-  margin-right: 0.5rem;
-}
+#rosterPlayerCardKey .player-tag.legend-pos,
 #rosterPlayerCardKey .legend-team {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.12rem 0.55rem;
-  background: linear-gradient(to bottom, rgba(13,14,35,0.15), rgba(8,8,25,0.32));
+  padding: 0.35rem 0.55rem;
   border-radius: 8px;
-   -webkit-backdrop-filter: blur(4px) saturate(110%) brightness(120%);
+  background: linear-gradient(to bottom, rgba(13,14,35,0.15), rgba(8,8,25,0.32));
+  -webkit-backdrop-filter: blur(4px) saturate(110%) brightness(120%);
   backdrop-filter: blur(4px) saturate(110%) brightness(120%);
-  box-shadow: inset 0 0 3px rgba(255,255,255,0.1), rgba(0, 0, 0, 0.26) 0px 10px 26px 1px;
-  color: var(--color-text-primary);
+  box-shadow: inset 0 0 3px rgba(255,255,255,0.1), rgba(0,0,0,0.26) 0px 10px 26px 1px;
   font-weight: 800;
   letter-spacing: .25px;
 }
 
-/* Bottom row: align to edges, no chips on values */
+#rosterPlayerCardKey .legend-meta {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+#rosterPlayerCardKey .legend-pos-rank { color: var(--pos-qb); }
+#rosterPlayerCardKey .legend-age { color: var(--color-accent-primary); }
+#rosterPlayerCardKey .legend-meta .separator:last-of-type {
+  margin-left: auto;
+  margin-right: 0.5rem;
+}
+
 #rosterPlayerCardKey .legend-bottom {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  border-top: 1px solid var(--color-panel-border);
-  padding-top: 0.35rem;
+  margin-top: 0.2rem;
 }
-#rosterPlayerCardKey .kv-left, #rosterPlayerCardKey .kv-right {
-  color: var(--color-text-secondary);
+#rosterPlayerCardKey .legend-bottom-bg {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 110%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, rgba(13,14,35,0.15), rgba(8,8,25,0.32));
+  -webkit-backdrop-filter: blur(4px) saturate(110%) brightness(120%);
+  backdrop-filter: blur(4px) saturate(110%) brightness(120%);
+  box-shadow: inset 0 0 3px rgba(255,255,255,0.08), rgba(0,0,0,0.22) 0 10px 26px 0;
+  box-sizing: border-box;
+}
+#rosterPlayerCardKey .kv-left,
+#rosterPlayerCardKey .kv-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-weight: 700;
   letter-spacing: .2px;
+  color: var(--color-text-secondary);
 }
-#rosterPlayerCardKey .legend-ktc { color: #00EBC7; font-weight: 800; }
-#rosterPlayerCardKey .legend-adp { color: #58A7FF; font-weight: 800; }
+#rosterPlayerCardKey .kv-left .value,
+#rosterPlayerCardKey .kv-right .value {
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--color-text-primary);
+}
+#rosterPlayerCardKey .legend-ktc { color: #00EBC7; }
+#rosterPlayerCardKey .legend-adp { color: #58A7FF; }
 
-/* External footnote below the card */
 #rosterCardFootnote.legend-footnote {
   margin: 0.25rem auto 0;
   text-align: center;
@@ -1469,96 +1520,6 @@
   color: var(--color-text-tertiary);
   max-width: 340px;
 }
-@media (min-width: 1440px) {
-  #rosterCardFootnote.legend-footnote { max-width: 320px; }
-}
-
-
-/* --- Legend vertical spacing + centering tweaks --- */
-#rosterPlayerCardKey.legend-card {
-  /* spread out vertically by a lot */
-  padding: 1.25rem 0.95rem;
-}
-#rosterPlayerCardKey .legend-main {
-  margin-bottom: 0.9rem; /* spacing between name row and meta row */
-}
-#rosterPlayerCardKey .legend-meta {
-  margin-bottom: 0.9rem; /* spacing between meta row and bottom row */
-}
-/* KTC/ADP row vertically centered with its background */
-#rosterPlayerCardKey .legend-bottom {
-  align-items: center !important; /* center the text vertically */
-  min-height: 2.4rem;             /* give the row a stable height */
-}
-#rosterPlayerCardKey .kv-left,
-#rosterPlayerCardKey .kv-right {
-  gap: 0.45rem; /* comfortable label/value spacing */
-}
-#rosterPlayerCardKey .kv-left .value,
-#rosterPlayerCardKey .kv-right .value {
-  line-height: 1.15; /* improve vertical alignment appearance */
-}
-
-
-/* --- Legend bottom-row background: smaller vertical height without changing text spacing --- */
-#rosterPlayerCardKey .legend-bottom {
-  position: relative;
-  background: transparent !important; /* ensure no inherited row bg */
-}
-#rosterPlayerCardKey .legend-bottom::before {
-  content: "";
-  position: absolute;
-  left: 0.5rem;
-  right: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  height: var(--legend-bottom-bg-height, 1.25rem); /* <-- adjust this to change the bg height */
-    z-index: 0;
-  pointer-events: none;
-}
-#rosterPlayerCardKey .legend-bottom > * {
-  position: relative;
-  z-index: 1; /* keep text above the bg overlay */
-}
-
-/* --- Bottom bar rework: full-width inner container, no pseudo, no extra line above --- */
-#rosterPlayerCardKey .legend-bottom {
-  position: relative;
-  border-top: none !important;      /* remove the line above */
-  padding-top: 0 !important;
-  margin-top: 0.2rem;               /* small spacing from meta row (text spacing unchanged) */
-}
-
-#rosterPlayerCardKey .legend-bottom::before { 
-  content: none !important;         /* kill previous overlay if present */
-}
-
-#rosterPlayerCardKey .legend-bottom-bg {
-  display: flex;
-  align-items: center;              /* vertically middle-align KTC/ADP with the bar */
-  justify-content: space-between;
-  width: 110%;
-  padding: 0.55rem 0.75rem;         /* controls bar height; adjust first value for taller/shorter */
-  background: linear-gradient(to bottom, rgba(13,14,35,0.15), rgba(8,8,25,0.32));
-  border-radius: 8px;
-   -webkit-backdrop-filter: blur(4px) saturate(110%) brightness(120%);
-  backdrop-filter: blur(4px) saturate(110%) brightness(120%);
-  box-shadow: inset 0 0 3px rgba(255,255,255,0.08), rgba(0, 0, 0, 0.22) 0px 10px 26px 0px;
-  color: var(--color-text-primary);
-  font-weight: 800;
-  letter-spacing: .25px;
-  box-sizing: border-box;
-}
-
-#rosterPlayerCardKey .legend-bottom-bg .kv-left,
-#rosterPlayerCardKey .legend-bottom-bg .kv-right {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-#rosterPlayerCardKey .legend-bottom-bg .value { line-height: 1.15; }
-
 
     /* --- CUSTOM RULE: Prevent Wrapping on Ownership Page --- */
     #playerListView .pl-player-info,
@@ -1746,6 +1707,10 @@ main#content { align-items: stretch !important; }
   }
 }
 
+.install-card {
+  padding: 0.75rem;
+}
+
 .install-card h4 {
   margin: 0 0 0.25rem 0;
   font-size: 0.9rem;
@@ -1781,152 +1746,6 @@ main#content { align-items: stretch !important; }
   display:block !important;                                /* show only when Welcome visible */
 }
 
-/* Paste at the very END of styles.css */
-/* === LEGEND CARD — INDIVIDUAL CONTROLS (no vars) === */
-                
-        /* ⬇︎↙️⬇︎⬇️⬇︎⏬️⬇︎🔽⬇︎⏬️⬇︎⬇️⬇︎↘️⬇︎ */
-
-#legend-section .panel-title{
-  font-size: 0.95rem !important;
-  font-weight: 800 !important;
-  letter-spacing: .6px !important;
-  color: #EAEBF0 !important;
-}
-
-#rosterPlayerCardKey.legend-card { 
-    padding: 0.70rem .8rem !important; 
-    background-color: rgba(13, 14, 35, 0.21);
-       background-image: linear-gradient(rgba(255,255,255, 0.03), rgba(255,255,255, 0.03));
-        -webkit-backdrop-filter: blur(0px) saturate(120%) brightness(120%);
-        backdrop-filter: blur(0px) saturate(120%) brightness(120%);
-        box-shadow: inset 0 0 0 0px rgba(255,255,255, 0.05), inset 0 0 0 4px rgba(200,200,200, 0.025), 0 10px 26px rgba(0,0,0, var(--outerA, .22));
-        
-        /* Frame */
-        border: 1px solid rgba(128, 138, 189, 0.2);
-        border-radius: 10px;
-        box-shadow: rgba(255, 255, 255, 0.05) 0px 0px 0px 0px inset, rgba(200, 200, 200, 0.025) 0px 0px 0px 4px inset, rgba(0, 0, 0, 0.22) 0px 10px 26px 0px;
-}
-
-
-/* Top row */
-#rosterPlayerCardKey .player-tag.legend-pos{
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 0.9rem !important;
-  font-weight: 400 !important;
-  color: #EAEBF0 !important;
-  padding: 0.4rem 0.55rem !important;   /* ← edit these to resize the POS chip */
-  border-radius: 6px !important;
-  line-height: 1.05 !important;
-  letter-spacing: .45px !important;
-}
-#rosterPlayerCardKey .legend-name{
-  font-size: 1.1rem !important;
-  font-weight: 400 !important;
-  letter-spacing: .1px !important;
-  color: #c6b3ff !important;
-    margin-left: 0.5rem
-}
-
-/* Row gaps */
-#rosterPlayerCardKey .legend-main{
-  display: flex !important;      /* keep layout */
-  align-items: center !important;
-  gap: 0.75rem !important;        /* POS ↔ Name gap (edit) */
-  margin-bottom: 0.9rem !important; /* gap to meta row (edit) */
-}
-
-/* Meta row */
-#rosterPlayerCardKey .legend-meta{
-  display: flex !important;
-  align-items: center !important;
-  font-size: 1rem !important;
-  font-weight: 600 !important;
-  color: #9096C0 !important;
-  margin-bottom: 0.9rem !important; /* gap to bottom row (edit) */
-  line-height: 1.2 !important;
-}
-#rosterPlayerCardKey .legend-pos-rank{
-  color: #FF3A75CA !important;
-  font-weight: 400 !important;
-  text-align: center !important;
-  font-size: 0.8rem !important;
-  line-height: 1.2 !important;
-}
-#rosterPlayerCardKey .legend-age{
-  color: #766DFF !important;
-  font-weight: 700 !important;
-  font-size: 1rem !important;
-  line-height: 1.2 !important;
-}
-/* If your separators are elements with .separator, control them here: */
-#rosterPlayerCardKey .legend-meta .separator{
-  color: #9096C0 !important;
-  font-weight: 600 !important;
-  font-size: 1rem !important;
-  line-height: 1 !important;
-}
-#rosterPlayerCardKey .legend-age {
-font-size: .95rem !important;
-font-weight: 500 !important;
-}
-/* Team chip (resize independent of POS chip) */
-#rosterPlayerCardKey .legend-team{
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 0.9rem !important;
-  font-weight: 400 !important;
-  color: #EAEBF0 !important;
-  padding: 0.4rem 0.55rem !important;   /* ← edit these to resize the TEAM chip */
-  border-radius: 6px !important;
-  line-height: 1.1 !important;
-  white-space: nowrap !important;
-}
-
-/* Bottom row container (controls bar height via first padding value) */
-#rosterPlayerCardKey .legend-bottom-bg{
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  padding: 0.85rem 0.85rem !important;   /* ← edit: vertical horizontal */
-  box-sizing: border-box !important;
-}
-
-/* Bottom row labels and values */
-#rosterPlayerCardKey .kv-right{
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.35rem !important;               /* label ↔ value gap (edit) */
-  color: #9096C0 !important;
-  font-weight: 700 !important;
-  letter-spacing: .2px !important;
-}
-#rosterPlayerCardKey .kv-left{
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.35rem !important;
-  color: #9096C0 !important;
-  font-weight: 700 !important;
-  letter-spacing: .2px !important;
-  font-size: 1rem !important;            /* explicit since base didn’t define it */
-}
-#rosterPlayerCardKey .kv-left .value,
-#rosterPlayerCardKey .kv-right .value{
-  font-size: 1rem !important;            /* numeric size (edit) */
-  font-weight: 800 !important;
-  line-height: 1.15 !important;
-}
-#rosterPlayerCardKey .legend-ktc{ color: #00EBC7 !important; }
-#rosterPlayerCardKey .legend-adp{ color: #58A7FF !important; }
-
-/* Footnote */
-#rosterCardFootnote.legend-footnote{
-  font-size: 0.74rem !important;
-  color: #5F6795 !important;
-}
 
 /* === Welcome-only logo + padding (surgical) === */
 #welcome-screen { padding-top: 0.3rem !important; padding-bottom: 0.25rem !important; }
@@ -2020,6 +1839,10 @@ font-weight: 500 !important;
     gap: 0.25rem;
     z-index: 20;
     min-width: 150px;
+}
+
+.dropdown-menu.glass-panel {
+    background-color: transparent;
 }
 
 .dropdown-menu a {
@@ -2128,12 +1951,7 @@ font-weight: 500 !important;
 
 
 #legend-section {
-            background: var(--color-panel-bg);
-            border: 1px solid var(--color-panel-border);
             border-radius: var(--panel-border-radius);
-            backdrop-filter: blur(3px);
-            -webkit-backdrop-filter: blur(3px);
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
 /* Inline SVG for Trade Preview swap icon */
