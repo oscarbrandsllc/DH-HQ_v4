@@ -2154,5 +2154,43 @@ font-weight: 500 !important;
 
 /* Center collapse icon: forced horizontal stretch via CSS sizing + preserveAspectRatio="none" */
 
+/* Liquid Glass Styles - Adapted for Dark Mode */
+
+.glass {
+  position: relative;
+  background: rgba(22, 24, 43, 0.25); /* --color-panel-bg with more opacity */
+  -webkit-backdrop-filter: blur(5px) saturate(150%);
+  backdrop-filter: blur(5px) saturate(150%);
+  border: 1px solid var(--color-panel-border);
+  border-radius: var(--panel-border-radius);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.glass:hover {
+  background: rgba(22, 24, 43, 0.4);
+  border: 1px solid var(--color-panel-border-glow);
+  box-shadow: 0 0 15px var(--color-accent-primary-glow), 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.05);
+}
+
+.glass::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  border-radius: var(--panel-border-radius);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.8;
+  box-shadow: inset -10px -8px 0px -11px rgba(255, 255, 255, 0.7),
+    inset 0px -9px 0px -8px rgba(255, 255, 255, 0.7);
+}
 
 

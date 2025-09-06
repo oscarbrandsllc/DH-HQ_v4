@@ -694,11 +694,11 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
 
             teamsToRender.forEach(team => {
                 const columnWrapper = document.createElement('div');
-                columnWrapper.className = 'roster-column';
+                columnWrapper.className = 'roster-column glass';
                 columnWrapper.dataset.teamName = team.teamName;
                 
                 const header = document.createElement('div');
-                header.className = 'team-header-item';
+                header.className = 'team-header-item glass';
                 
                 const checkbox = document.createElement('div');
                 checkbox.className = 'team-compare-checkbox';
@@ -835,7 +835,7 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
 
         function createPlayerRow(player, teamName) {
             const row = document.createElement('div');
-            row.className = 'player-row';
+            row.className = 'player-row glass';
             row.dataset.assetId = player.id;
             row.dataset.assetLabel = player.name;
             row.dataset.assetKtc = player.ktc || 0;
@@ -881,7 +881,7 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
 
         function createPickRow(pick, teamName) {
             const row = document.createElement('div');
-            row.className = 'pick-row';
+            row.className = 'pick-row glass';
             row.dataset.assetId = pick.id;
             row.dataset.assetLabel = pick.label;
             row.dataset.assetKtc = pick.ktc || 0;
