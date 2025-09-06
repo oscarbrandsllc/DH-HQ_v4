@@ -531,6 +531,7 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
                 const columns = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
                 if (columns.length < 13) return;
                 const clean = (str) => str ? str.replace(/"/g, '').trim() : '';
+                const rank = parseInt(clean(columns[0]), 10);
                 const pos = clean(columns[2]);
                 const sleeperId = clean(columns[12]);
                 const adp = parseFloat(clean(columns[11]));
@@ -543,11 +544,12 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
                     if (pickName) dataMap[pickName] = { adp: null, ktc: ktcValue, posRank: null };
                 } else if (sleeperId && sleeperId !== 'NA') {
                     // Add the parsed age to the player's data object
-                    dataMap[sleeperId] = { 
-                        age: isNaN(age) ? null : age, 
-                        adp: isNaN(adp) ? null : adp, 
-                        ktc: isNaN(ktcValue) ? null : ktcValue, 
-                        posRank: posRank 
+                    dataMap[sleeperId] = {
+                        age: isNaN(age) ? null : age,
+                        adp: isNaN(adp) ? null : adp,
+                        ktc: isNaN(ktcValue) ? null : ktcValue,
+                        posRank: posRank,
+                        rank: isNaN(rank) ? null : rank
                     };
                 }
             });
@@ -630,7 +632,7 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
 
         function getPlayerData(playerId, slot) {
             const player = state.players[playerId];
-            if (!player) return { id: playerId, name: 'Unknown Player', pos: '?', age: '?', team: '?', adp: null, ktc: null, slot, posRank: null };
+            if (!player) return { id: playerId, name: 'Unknown Player', pos: '?', age: '?', team: '?', adp: null, ktc: null, slot, posRank: null, rank: null };
             const valueData = state.isSuperflex ? state.sflxData[playerId] : state.oneQbData[playerId];
             let lastName = player.last_name || '';
             if (lastName.includes('-')) lastName = lastName.split('-')[0];
@@ -647,10 +649,11 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
                 pos: player.position || '?', 
                 age: formattedAge, // Use the new formatted age
                 team: player.team || 'FA', 
-                adp: valueData?.adp || null, 
-                ktc: valueData?.ktc || null, 
-                slot, 
-                posRank: valueData?.posRank || null 
+                adp: valueData?.adp || null,
+                ktc: valueData?.ktc || null,
+                slot,
+                rank: valueData?.rank || null,
+                posRank: valueData?.posRank || null
             };
         }
 
@@ -846,6 +849,7 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
 
             const adp = player.adp ? player.adp.toFixed(1) : '—';
             const ktc = player.ktc || '—';
+            const rankSup = player.rank ? `<sup>(${player.rank})</sup>` : '';
             const slotAbbr = { 'SUPER_FLEX': 'SFLX', 'FLEX': 'FLX' };
             const displaySlot = state.currentRosterView === 'depth' ? (slotAbbr[player.slot] || player.slot) : player.pos;
             const teamTagHTML = player.team && player.team !== 'FA' 
@@ -867,7 +871,7 @@ function showLegend(){ try{ document.getElementById('legend-section')?.classList
                     ${teamTagHTML}
                 </div>
                 <div class="player-value-line">
-                    <span>KTC: <span class="value player-ktc">${ktc}</span></span>
+                    <span>KTC: <span class="value player-ktc">${ktc}${rankSup}</span></span>
                     <span>ADP: <span class="value player-adp">${adp}</span></span>
                 </div>
             `;
